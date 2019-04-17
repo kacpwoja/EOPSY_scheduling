@@ -1,0 +1,82 @@
+#!/bin/sh
+
+runconf()
+{
+	cp "../../conf/$1.conf" "scheduling.conf"
+	make "compile"
+	make "run"
+	mkdir "../../results/$1"
+	cp "Summary-Results" "../../results/$1/"
+	cp "Summary-Processes" "../../results/$1/"
+}
+
+setup()
+{
+	wget "http://www.ia.pw.edu.pl/~tkruk/edu/eopsy/lab/task3.tgz"
+	tar "-xvf" "task3.tgz"
+	rm "-f" "task3.tgz"
+	cd "task3/ftp/"
+	make "setup"
+	cd ".."
+	rm "-fr" "ftp" "README"
+	cd ".."
+	mkdir "results"
+}
+
+clean()
+{
+	rm "-fr" "task3"
+	if [ "$1" = "full" ]
+	then
+		rm "-fr" "results"
+	fi
+}
+
+run()
+{
+	cd "task3/work"
+	runconf "two"
+	runconf "five"
+	runconf "ten"
+	cd "../../"
+}
+
+# Defualt
+if [ "x$1" = "x" ]
+then
+	clean full
+	setup
+	run
+	clean
+	echo "Results availible in directory results/"
+	exit 0
+fi
+
+# Other options
+
+if [ "$1" = "setup" ]
+then
+	setup
+	exit 0
+fi
+
+if [ "$1" = "clean" ]
+then
+	clean
+	exit 0
+fi
+
+if [ "$1" = "run" ]
+then
+	run
+	exit 0
+fi
+
+if [ "$1" = "reset" ]
+then
+	clean "full"
+	exit 0
+fi
+
+echo "TODO: Error msg"
+exit 1
