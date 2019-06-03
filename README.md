@@ -1,3 +1,3 @@
 # EOPSY_scheduling
 
-Script for performing the 4th EOPSY lab.
+Script for performing the 3rd EOPSY lab.
